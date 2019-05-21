@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Home</title>
+  </head>
+  <body>
+    {% block body %}
+    <h1>Menu</h1>
+    <a href="{{ url_for('create') }}"><button type="button" name="button">Create meal</button></a>
+    {% for meal in meals %}
+      <h2>{{meal.name}}</h2>
+      <p>
+        {{meal.description}}<br>
+        {{meal.weight}}<br>
+        {{meal.calories}}<br>
+        {{meal.price}}<br>
+      </p>
+    {% endfor %}
+    {% endblock %}
+  </body>
+</html>
