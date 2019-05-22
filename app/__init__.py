@@ -34,4 +34,33 @@ def create_app():
 
         return render_template("create.html")
 
+    @app.route("/delete", methods=["POST"])
+    def delete():
+        name_delete = request.form.get("name")
+        meal = Meal.query.filter_by(name=name_delete).first()
+        db.session.delete(meal)
+        db.session.commit()
+
+        return redirect("/")
+
+    @app.route("/update", methods=["GET", "POST"])
+    def update():
+        oldname = request.args.get("oldname")
+        oldmeal = Meal.query.filter_by(name=oldname).first()
+        return render_template("update.html", oldmeal=oldmeal)
+
+    @app.route("/update_form", methods=["GET", "POST"])
+    def update_form():
+        oldname = request.form.get("oldname")
+        oldmeal = Meal.query.filter_by(name=oldname).first()
+
+        oldmeal.name = request.form.get("newname")
+        oldmeal.description = request.form.get("newdescription")
+        oldmeal.weight = request.form.get("newweight")
+        oldmeal.calories = request.form.get("newcalories")
+        oldmeal.price = request.form.get("newprice")
+
+        db.session.commit()
+        return redirect("/")
+
     return app

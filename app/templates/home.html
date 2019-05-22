@@ -16,6 +16,14 @@
         {{meal.calories}}<br>
         {{meal.price}}<br>
       </p>
+
+      <form action="./delete" method="POST">
+        <input type="hidden" name="name" value="{{meal.name}}">
+        <input type="submit" value="Delete">
+      </form>
+
+      <a href="{{ url_for('update', oldname = meal.name) }}"><button type="button" name="button">Update meal</button></a>
+
     {% endfor %}
     {% endblock %}
   </body>
