@@ -45,15 +45,15 @@ def create_app():
 
     @app.route("/update", methods=["GET", "POST"])
     def update():
-        oldname = request.args.get("oldname")
-        oldmeal = Meal.query.filter_by(name=oldname).first()
+        oldmeal_id = request.args.get("oldmeal_id")
+        oldmeal = Meal.query.filter_by(meal_id=oldmeal_id).first()
         return render_template("update.html", oldmeal=oldmeal)
 
-    @app.route("/update_form", methods=["GET", "POST"])
+    @app.route("/update_form", methods=["POST"])
     def update_form():
-        oldname = request.form.get("oldname")
-        oldmeal = Meal.query.filter_by(name=oldname).first()
-
+        oldmeal_id = request.form.get("btn")
+        oldmeal = Meal.query.filter_by(meal_id=oldmeal_id).first()
+        
         oldmeal.name = request.form.get("newname")
         oldmeal.description = request.form.get("newdescription")
         oldmeal.weight = request.form.get("newweight")

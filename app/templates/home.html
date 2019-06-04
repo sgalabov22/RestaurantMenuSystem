@@ -22,7 +22,7 @@
         <input type="submit" value="Delete">
       </form>
 
-      <a href="{{ url_for('update', oldname = meal.name) }}"><button type="button" name="button">Update meal</button></a>
+      <a href="{{ url_for('update', oldmeal_id = meal.meal_id ) }}"><button type="button" name="button">Update meal</button></a>
 
     {% endfor %}
     {% endblock %}

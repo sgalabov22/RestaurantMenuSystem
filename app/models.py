@@ -1,7 +1,10 @@
 from app import db
 
 class Meal(db.Model):
-    name = db.Column(db.String(80), unique=True, nullable=False, primary_key=True)
+    #meal_id
+    meal_id = db.Column(db.Integer(), primary_key=True)
+    #name
+    name = db.Column(db.String(80), nullable=False)
     #desc
     description = db.Column(db.String(80), nullable=False)
     #weight

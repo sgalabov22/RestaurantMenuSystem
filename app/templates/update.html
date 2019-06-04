@@ -7,13 +7,12 @@
   <body>
     {% block body %}
       <form action="./update_form" method="POST">
-        <input type="hidden" name="oldname" value="{{oldmeal.name}}">
-        <input type="text" name="newname" placeholder="{{oldmeal.name}}"><br>
-        <input type="text" name="newdescription" placeholder="Enter description"><br>
-        <input type="number" step="0.01" name="newweight" placeholder="Enter weight"><br>
-        <input type="number" name="newcalories" placeholder="Enter calories"><br>
-        <input type="number" step="0.01" name="newprice" placeholder="Enter price"><br>
-        <input type="submit" value="Update meal">
+        <input type="text" name="newname" value="{{oldmeal.name}}"><br>
+        <input type="text" name="newdescription" value="{{oldmeal.description}}"><br>
+        <input type="number" step="0.01" name="newweight" value="{{oldmeal.weight}}"><br>
+        <input type="number" name="newcalories" value="{{oldmeal.calories}}"><br>
+        <input type="number" step="0.01" name="newprice" value="{{oldmeal.price}}"><br>
+        <button type="submit" name="btn" value="{{oldmeal.meal_id}}">Update</button>
       </form>
     {% endblock %}
   </body>
