@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,9 +16,22 @@ from .models import Meal
 
 def create_app():
     @app.route("/", methods=["GET"])
+    @app.route("/index", methods=["GET"])
     def home():
-        meals = Meal.query.all()
-        return render_template("home.html", meals=meals)
+        page = request.args.get("page", 1, type=int)
+        meals = Meal.query.order_by(Meal.price.desc()).paginate(page, 2, True)
+
+        if meals.has_next:
+            next_url = url_for("home", page=meals.next_num)
+        else:
+            next_url = None
+
+        if meals.has_prev:
+            prev_url = url_for("home", page=meals.prev_num)
+        else:
+            prev_url = None
+
+        return render_template("home.html", meals=meals.items, next_url=next_url, prev_url=prev_url)
 
     @app.route("/create", methods=["GET", "POST"])
     def create():
@@ -53,7 +66,7 @@ def create_app():
     def update_form():
         oldmeal_id = request.form.get("btn")
         oldmeal = Meal.query.filter_by(meal_id=oldmeal_id).first()
-        
+
         oldmeal.name = request.form.get("newname")
         oldmeal.description = request.form.get("newdescription")
         oldmeal.weight = request.form.get("newweight")

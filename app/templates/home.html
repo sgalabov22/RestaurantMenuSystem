@@ -23,8 +23,16 @@
       </form>
 
       <a href="{{ url_for('update', oldmeal_id = meal.meal_id ) }}"><button type="button" name="button">Update meal</button></a>
-
     {% endfor %}
+    <br><br>
+    {% if prev_url %}
+      <a href="{{ prev_url }}"><button type="button" name="button">More expensive meals</button></a>
+    {% endif %}
+
+    {% if next_url %}
+      <a href="{{ next_url }}"><button type="button" name="button">Less expensive meals</button></a>
+    {% endif %}
+
     {% endblock %}
   </body>
 </html>
