@@ -3,17 +3,45 @@
   <head>
     <meta charset="utf-8">
     <title>New</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#create_meal").click(function() {
+          var meal = {};
+          meal["name"] = $("input[name=name]").val();
+          meal["description"] = $("input[name=description]").val();
+          meal["weight"] = parseFloat($("input[name=weight]").val());
+          meal["calories"] = parseInt($("input[name=calories]").val(), 10);
+          meal["price"] = parseFloat($("input[name=price]").val());
+
+          $.ajax({
+            type: "POST",
+            url: "http://localhost:5000/api/meals",
+            data: JSON.stringify(meal),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(data, status, xhrStatus) {
+              console.log("success");
+              window.location.href = "http://localhost:5000/api/meals";
+            },
+            error: function(xhrStatus, status, error) {
+              alert("An error occured, make sure you have filled all fields.");
+            }
+          });
+        });
+      });
+    </script>
+
   </head>
   <body>
     {% block body %}
-    <form action="./create" method="POST">
-      <input type="text" name="name" placeholder="Enter name"><br>
-      <input type="text" name="description" placeholder="Enter description"><br>
-      <input type="number" step="0.01" name="weight" placeholder="Enter weight"><br>
-      <input type="number" name="calories" placeholder="Enter calories"><br>
-      <input type="number" step="0.01" name="price" placeholder="Enter price"><br>
-      <input type="submit" value="Create meal">
-    </form>
+    <input type="text" name="name" placeholder="Enter name"><br>
+    <input type="text" name="description" placeholder="Enter description"><br>
+    <input type="number" step="0.01" name="weight" placeholder="Enter weight"><br>
+    <input type="number" name="calories" placeholder="Enter calories"><br>
+    <input type="number" step="0.01" name="price" placeholder="Enter price"><br>
+    <input type="submit" id="create_meal" value="Create meal">
     {% endblock %}
   </body>
 </html>

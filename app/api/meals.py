@@ -11,7 +11,7 @@ def get_meal(id):
 @bp.route('/meals', methods=['GET'])
 def get_meals():
     page = request.args.get("page", 1, type=int)
-    per_page = min(request.args.get('limit', 5, type=int), 100)
+    per_page = request.args.get("limit", 5, type=int)
     data = Meal.to_collection_dict(Meal.query, page, per_page, 'api.get_meals')
 
     if data == -1:
@@ -41,7 +41,10 @@ def create_meal():
 def update_meal(id):
     meal = Meal.query.get_or_404(id)
     data = request.get_json() or {}
-    meal.from_dict(data)
+    if meal.from_dict(data) == -1:
+        response = jsonify({'error': 'Partial content'})
+        response.status_code = 206
+        return response
     db.session.commit()
     return jsonify(meal.to_dict())
 
