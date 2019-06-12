@@ -14,6 +14,9 @@ db = SQLAlchemy(app)
 from app import models
 from .models import Meal
 
+from app.api import bp as api_bp
+app.register_blueprint(api_bp, url_prefix='/api')
+
 def create_app():
     @app.route("/", methods=["GET"])
     @app.route("/index", methods=["GET"])
