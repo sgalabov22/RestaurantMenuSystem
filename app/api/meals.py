@@ -13,6 +13,12 @@ def get_meals():
     page = request.args.get("page", 1, type=int)
     per_page = min(request.args.get('limit', 5, type=int), 100)
     data = Meal.to_collection_dict(Meal.query, page, per_page, 'api.get_meals')
+
+    if data == -1:
+        response = jsonify({'error': 'Not found'})
+        response.status_code = 404
+        return response
+
     return jsonify(data)
 
 @bp.route('/meals', methods=['POST'])

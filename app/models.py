@@ -5,6 +5,10 @@ class PaginatedAPIMixin(object):
     @staticmethod
     def to_collection_dict(query, page, per_page, endpoint, **kwargs):
         resources = query.paginate(page, per_page, False)
+
+        if page > resources.pages:
+            return -1
+
         data = {
             'items': [item.to_dict() for item in resources.items],
             '_meta': {
