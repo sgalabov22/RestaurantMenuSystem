@@ -22,15 +22,17 @@ def create_app():
     @app.route("/index", methods=["GET"])
     def home():
         page = request.args.get("page", 1, type=int)
-        meals = Meal.query.order_by(Meal.price.desc()).paginate(page, 2, True)
+        limit = request.args.get("limit", 2, type=int)
+
+        meals = Meal.query.order_by(Meal.price.desc()).paginate(page, limit, True)
 
         if meals.has_next:
-            next_url = url_for("home", page=meals.next_num)
+            next_url = url_for("home", page=meals.next_num, limit=limit)
         else:
             next_url = None
 
         if meals.has_prev:
-            prev_url = url_for("home", page=meals.prev_num)
+            prev_url = url_for("home", page=meals.prev_num, limit=limit)
         else:
             prev_url = None
 
@@ -46,7 +48,7 @@ def create_app():
                             price=request.form.get("price"))
             db.session.add(new_meal)
             db.session.commit()
-            return redirect("/")
+            return redirect("/index")
 
         return render_template("create.html")
 
@@ -57,7 +59,7 @@ def create_app():
         db.session.delete(meal)
         db.session.commit()
 
-        return redirect("/")
+        return redirect("/index")
 
     @app.route("/update", methods=["GET", "POST"])
     def update():
@@ -77,6 +79,6 @@ def create_app():
         oldmeal.price = request.form.get("newprice")
 
         db.session.commit()
-        return redirect("/")
+        return redirect("/index")
 
     return app
