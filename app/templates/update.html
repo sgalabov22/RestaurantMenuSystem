@@ -3,17 +3,47 @@
   <head>
     <meta charset="utf-8">
     <title>Update</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#update-btn").click(function() {
+          var meal = {};
+          meal["name"] = $("input[name=newname]").val();
+          meal["description"] = $("input[name=newdescription]").val();
+          meal["weight"] = parseFloat($("input[name=newweight]").val());
+          meal["calories"] = parseInt($("input[name=newcalories]").val(), 10);
+          meal["price"] = parseFloat($("input[name=newprice]").val());
+
+          var _id = $("#update-btn").val()
+
+          $.ajax({
+            type: "PUT",
+            url: "http://localhost:5000/api/meals/" + _id,
+            data: JSON.stringify(meal),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(data, status, xhrStatus) {
+              console.log("success");
+              window.location.href = "http://localhost:5000/api/meals";
+            },
+            error: function(xhrStatus, status, error) {
+              console.log(xhrStatus);
+              alert("An error occured, make sure you have filled all fields.");
+            }
+          });
+        });
+      });
+    </script>
   </head>
   <body>
     {% block body %}
-      <form action="./update_form" method="POST">
-        <input type="text" name="newname" value="{{oldmeal.name}}"><br>
-        <input type="text" name="newdescription" value="{{oldmeal.description}}"><br>
-        <input type="number" step="0.01" name="newweight" value="{{oldmeal.weight}}"><br>
-        <input type="number" name="newcalories" value="{{oldmeal.calories}}"><br>
-        <input type="number" step="0.01" name="newprice" value="{{oldmeal.price}}"><br>
-        <button type="submit" name="btn" value="{{oldmeal.meal_id}}">Update</button>
-      </form>
+    <input type="text" name="newname" value="{{oldmeal.name}}"><br>
+    <input type="text" name="newdescription" value="{{oldmeal.description}}"><br>
+    <input type="number" step="0.01" name="newweight" value="{{oldmeal.weight}}"><br>
+    <input type="number" name="newcalories" value="{{oldmeal.calories}}"><br>
+    <input type="number" step="0.01" name="newprice" value="{{oldmeal.price}}"><br>
+    <button type="submit" name="btn" id="update-btn" value="{{oldmeal.meal_id}}">Update</button>
     {% endblock %}
   </body>
 </html>

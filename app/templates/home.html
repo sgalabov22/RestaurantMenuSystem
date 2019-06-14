@@ -3,6 +3,128 @@
   <head>
     <meta charset="utf-8">
     <title>Home</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var meal = {};
+        meal["name"] = $("input[name=name]").val();
+        meal["description"] = $("input[name=description]").val();
+        meal["weight"] = parseFloat($("input[name=weight]").val());
+        meal["calories"] = parseInt($("input[name=calories]").val(), 10);
+        meal["price"] = parseFloat($("input[name=price]").val());
+
+        $.ajax({
+          type: "GET",
+          url: "http://localhost:5000/api/meals",
+          processData: true,
+          success: function(data, status, xhrStatus) {
+            // console.log(data);
+            // console.log(data['items']);
+            // create html element for each item in data['items']
+
+            // console.log(data['_meta']['page']);
+            $("#txtPage").val(data['_meta']['page']);
+            $("#txtTotal").val(data['_meta']['total_pages']);
+
+            data['items'].forEach((item) => {
+              var meal = $("<div></div>");
+              meal.append('<h1>' + item['name'] + '</h1>');
+              meal.append('<p> description: ' + item['description'] + '</p>');
+              meal.append('<p> weight: ' + item['weight'] + '</p>');
+              meal.append('<p> calories: ' + item['calories'] + '</p>');
+              meal.append('<p>price: ' + item['price'] + '</p>');
+              console.log(meal);
+              $(".meal-container").append(meal);
+            });
+          },
+          error: function(xhrStatus, status, error) {
+            alert("An error occured");
+          }
+        });
+
+        $("#next-page").click(function() {
+          var page = ~~$("#txtPage").val();
+          var totalPages = ~~$("#txtTotal").val();
+          var nextPage = page + 1;
+
+          console.log("nextPage = " + nextPage);
+
+          if (nextPage == totalPages) {
+            $('#next-page').prop('disabled', true);
+          }
+          if (nextPage <= totalPages) {
+            $('#prev-page').prop('disabled', false);
+
+            $.ajax({
+              type: "GET",
+              url: "http://localhost:5000/api/meals?page=" + nextPage,
+              processData: true,
+              success: function(data, status, xhrStatus) {
+                $(".meal-container").empty();
+                $("#txtPage").val(nextPage);
+
+                console.log(data);
+                console.log(data['items']);
+                // create html element for each item in data['items']
+
+                data['items'].forEach((item) => {
+                  var meal = $("<div></div>");
+                  meal.append('<h1>' + item['name'] + '</h1>');
+                  meal.append('<p> description: ' + item['description'] + '</p>');
+                  meal.append('<p> weight: ' + item['weight'] + '</p>');
+                  meal.append('<p> calories: ' + item['calories'] + '</p>');
+                  meal.append('<p>price: ' + item['price'] + '</p>');
+                  console.log(meal);
+                  $(".meal-container").append(meal);
+                });
+              }
+            });
+          }
+        });
+
+        $("#prev-page").click(function() {
+          var page = ~~$("#txtPage").val();
+          var totalPages = ~~$("#txtTotal").val();
+          var prevPage = page - 1;
+
+          console.log("prevPage = " + prevPage);
+
+          if (prevPage == 1) {
+            $('#prev-page').prop('disabled', true);
+          }
+          if (prevPage >= 1) {
+            $('#next-page').prop('disabled', false);
+
+            $.ajax({
+              type: "GET",
+              url: "http://localhost:5000/api/meals?page=" + prevPage,
+              processData: true,
+              success: function(data, status, xhrStatus) {
+                $(".meal-container").empty();
+                $("#txtPage").val(prevPage);
+
+                console.log(data);
+                console.log(data['items']);
+                // create html element for each item in data['items']
+
+                data['items'].forEach((item) => {
+                  var meal = $("<div></div>");
+                  meal.append('<h1>' + item['name'] + '</h1>');
+                  meal.append('<p> description: ' + item['description'] + '</p>');
+                  meal.append('<p> weight: ' + item['weight'] + '</p>');
+                  meal.append('<p> calories: ' + item['calories'] + '</p>');
+                  meal.append('<p>price: ' + item['price'] + '</p>');
+                  console.log(meal);
+                  $(".meal-container").append(meal);
+                });
+              }
+            });
+          }
+        });
+      });
+    </script>
+
   </head>
   <body>
     {% block body %}
@@ -15,30 +137,18 @@
       <option value="5">5</option>
     </select>
 
-    {% for meal in meals %}
-      <h2>{{meal.name}}</h2>
-      <p>
-        {{meal.description}}<br>
-        {{meal.weight}}<br>
-        {{meal.calories}}<br>
-        {{meal.price}}<br>
-      </p>
+    <div class="meal-container">
 
-      <form action="./delete" method="POST">
-        <input type="hidden" name="name" value="{{meal.name}}">
-        <input type="submit" value="Delete">
-      </form>
+    </div>
 
-      <a href="{{ url_for('update', oldmeal_id = meal.meal_id ) }}"><button type="button" name="button">Update meal</button></a>
-    {% endfor %}
     <br><br>
-    {% if prev_url %}
-      <a href="{{ prev_url }}"><button type="button" name="button">More expensive meals</button></a>
-    {% endif %}
+    <button type="button" name="button" id="prev-page">Prev</button>
 
-    {% if next_url %}
-      <a href="{{ next_url }}"><button type="button" name="button">Less expensive meals</button></a>
-    {% endif %}
+    <input type="text" id="txtPage" disabled="true" style="width: 20px;" />
+      <span>of</span>
+    <input type="text" id="txtTotal" disabled="true" style="width: 20px;" />
+
+    <button type="button" name="button" id="next-page">Next</button>
 
     {% endblock %}
   </body>

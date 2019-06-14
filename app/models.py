@@ -4,7 +4,7 @@ from flask import url_for
 class PaginatedAPIMixin(object):
     @staticmethod
     def to_collection_dict(query, page, per_page, endpoint, **kwargs):
-        resources = query.paginate(page, per_page, False)
+        resources = query.order_by(Meal.price.desc()).paginate(page, per_page, False)
 
         if page > resources.pages:
             return -1
@@ -60,5 +60,7 @@ class Meal(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in ['name', 'description', 'weight', 'calories', 'price']:
-            if field in data:
-                setattr(self, field, data[field])
+            if field not in data:
+                return -1
+            setattr(self, field, data[field])
+        return 0
