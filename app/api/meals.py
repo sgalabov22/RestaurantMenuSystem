@@ -11,7 +11,7 @@ def get_meal(id):
 @bp.route('/meals', methods=['GET'])
 def get_meals():
     page = request.args.get("page", 1, type=int)
-    per_page = min(request.args.get('limit', 5, type=int), 100)
+    per_page = min(request.args.get("limit", 2, type=int), 100)
     data = Meal.to_collection_dict(Meal.query, page, per_page, 'api.get_meals')
 
     if data == -1:
