@@ -75,6 +75,7 @@
                   meal.append('<p> weight: ' + item['weight'] + '</p>');
                   meal.append('<p> calories: ' + item['calories'] + '</p>');
                   meal.append('<p>price: ' + item['price'] + '</p>');
+                  meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
                   console.log(meal);
                   $(".meal-container").append(meal);
                 });
@@ -115,6 +116,7 @@
                   meal.append('<p> weight: ' + item['weight'] + '</p>');
                   meal.append('<p> calories: ' + item['calories'] + '</p>');
                   meal.append('<p>price: ' + item['price'] + '</p>');
+                  meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
                   console.log(meal);
                   $(".meal-container").append(meal);
                 });
@@ -122,6 +124,23 @@
             });
           }
         });
+
+        $(document).on("click", ".delete", function() {
+          var meal_id = $(this).val();
+          console.log(meal_id);
+
+          $.ajax({
+            type: "DELETE",
+            url: "http://localhost:5000/api/meals/" + meal_id,
+            success: function(data, status, xhrStatus) {
+              console.log(meal_id + 'successfully deleted!');
+              location.reload();
+            },
+            error: function(xhrStatus, status, error) {
+              alert(JSON.stringify(xhrStatus));
+            }
+          });
+        })
       });
     </script>
 
