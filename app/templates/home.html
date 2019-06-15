@@ -7,7 +7,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
-
         $("#limit").change(function() {
           $.ajax({
             type: "GET",
@@ -28,16 +27,7 @@
               $("#txtTotal").val(data['_meta']['total_pages']);
 
               data['items'].forEach((item) => {
-                var meal = $("<div></div>");
-                meal.append('<h1>' + item['name'] + '</h1>');
-                meal.append('<p> description: ' + item['description'] + '</p>');
-                meal.append('<p> weight: ' + item['weight'] + '</p>');
-                meal.append('<p> calories: ' + item['calories'] + '</p>');
-                meal.append('<p>price: ' + item['price'] + '</p>');
-                meal.append('<a href="/update?oldmeal_id=' + item['id'] + '"><button type="button" class="update">Update</button></a>');
-                meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
-                console.log(meal);
-                $(".meal-container").append(meal);
+                createMealView(item);
               });
             },
             error: function(xhrStatus, status, error) {
@@ -60,16 +50,7 @@
             $("#txtTotal").val(data['_meta']['total_pages']);
 
             data['items'].forEach((item) => {
-              var meal = $("<div></div>");
-              meal.append('<h1>' + item['name'] + '</h1>');
-              meal.append('<p> description: ' + item['description'] + '</p>');
-              meal.append('<p> weight: ' + item['weight'] + '</p>');
-              meal.append('<p> calories: ' + item['calories'] + '</p>');
-              meal.append('<p>price: ' + item['price'] + '</p>');
-              meal.append('<a href="/update?oldmeal_id=' + item['id'] + '"><button type="button" class="update">Update</button></a>');
-              meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
-              console.log(meal);
-              $(".meal-container").append(meal);
+              createMealView(item);
             });
           },
           error: function(xhrStatus, status, error) {
@@ -110,16 +91,7 @@
                 // create html element for each item in data['items']
 
                 data['items'].forEach((item) => {
-                  var meal = $("<div></div>");
-                  meal.append('<h1>' + item['name'] + '</h1>');
-                  meal.append('<p> description: ' + item['description'] + '</p>');
-                  meal.append('<p> weight: ' + item['weight'] + '</p>');
-                  meal.append('<p> calories: ' + item['calories'] + '</p>');
-                  meal.append('<p>price: ' + item['price'] + '</p>');
-                  meal.append('<a href="/update?oldmeal_id=' + item['id'] + '"><button type="button" class="update">Update</button></a>');
-                  meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
-                  console.log(meal);
-                  $(".meal-container").append(meal);
+                  createMealView(item)
                 });
               }
             });
@@ -158,16 +130,7 @@
                 // create html element for each item in data['items']
 
                 data['items'].forEach((item) => {
-                  var meal = $("<div></div>");
-                  meal.append('<h1>' + item['name'] + '</h1>');
-                  meal.append('<p> description: ' + item['description'] + '</p>');
-                  meal.append('<p> weight: ' + item['weight'] + '</p>');
-                  meal.append('<p> calories: ' + item['calories'] + '</p>');
-                  meal.append('<p>price: ' + item['price'] + '</p>');
-                  meal.append('<a href="/update?oldmeal_id=' + item['id'] + '"><button type="button" class="update">Update</button></a>');
-                  meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
-                  console.log(meal);
-                  $(".meal-container").append(meal);
+                  createMealView(item)
                 });
               }
             });
@@ -191,6 +154,19 @@
           });
         })
       });
+
+      function createMealView(item) {
+        var meal = $("<div></div>");
+        meal.append('<h1>' + item['name'] + '</h1>');
+        meal.append('<p> description: ' + item['description'] + '</p>');
+        meal.append('<p> weight: ' + item['weight'] + '</p>');
+        meal.append('<p> calories: ' + item['calories'] + '</p>');
+        meal.append('<p>price: ' + item['price'] + '</p>');
+        meal.append('<a href="/update?oldmeal_id=' + item['id'] + '"><button type="button" class="update">Update</button></a>');
+        meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
+        console.log(meal);
+        $(".meal-container").append(meal);
+      }
 
     </script>
 
