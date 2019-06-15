@@ -26,7 +26,7 @@ def get_meals():
 @auth.login_required
 def create_meal():
     data = request.get_json() or {}
-    print(data)
+    #print(data)
 
     meal = Meal()
     if (meal.from_dict(data) == -1) :
@@ -44,6 +44,8 @@ def create_meal():
 def update_meal(id):
     meal = Meal.query.get_or_404(id)
     data = request.get_json() or {}
+    #print(data)
+
     if meal.from_dict(data) == -1:
         response = jsonify({'error': 'Partial content'})
         response.status_code = 206

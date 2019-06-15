@@ -61,6 +61,7 @@ class Meal(PaginatedAPIMixin, db.Model):
     def from_dict(self, data):
         for field in ['name', 'description', 'weight', 'calories', 'price']:
             if field not in data:
+                print(field)
                 return -1
             setattr(self, field, data[field])
         return 0
