@@ -19,6 +19,8 @@ from .models import Meal
 from app.api import bp as api_bp
 app.register_blueprint(api_bp, url_prefix='/api')
 
+from app.api.auth import auth
+
 def create_app():
     @app.route("/", methods=["GET"])
     @app.route("/index", methods=["GET"])
@@ -26,10 +28,12 @@ def create_app():
         return render_template("home.html")
 
     @app.route("/create", methods=["GET", "POST"])
+    @auth.login_required
     def create():
         return render_template("create.html")
 
     @app.route("/update", methods=["GET", "POST"])
+    @auth.login_required
     def update():
         oldmeal_id = request.args.get("oldmeal_id")
         oldmeal = Meal.query.filter_by(meal_id=oldmeal_id).first()
