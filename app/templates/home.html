@@ -7,23 +7,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
-        var meal = {};
-        meal["name"] = $("input[name=name]").val();
-        meal["description"] = $("input[name=description]").val();
-        meal["weight"] = parseFloat($("input[name=weight]").val());
-        meal["calories"] = parseInt($("input[name=calories]").val(), 10);
-        meal["price"] = parseFloat($("input[name=price]").val());
 
         $.ajax({
           type: "GET",
           url: "http://localhost:5000/api/meals",
           processData: true,
           success: function(data, status, xhrStatus) {
-            // console.log(data);
-            // console.log(data['items']);
-            // create html element for each item in data['items']
+            $('#prev-page').prop('disabled', true);
+            if (data['_meta']['total_pages'] == 1) {
+              $('#next-page').prop('disabled', true);
+            }
 
-            // console.log(data['_meta']['page']);
             $("#txtPage").val(data['_meta']['page']);
             $("#txtTotal").val(data['_meta']['total_pages']);
 
@@ -34,6 +28,7 @@
               meal.append('<p> weight: ' + item['weight'] + '</p>');
               meal.append('<p> calories: ' + item['calories'] + '</p>');
               meal.append('<p>price: ' + item['price'] + '</p>');
+              meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
               console.log(meal);
               $(".meal-container").append(meal);
             });
@@ -142,6 +137,7 @@
           });
         })
       });
+
     </script>
 
   </head>
