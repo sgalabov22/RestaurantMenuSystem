@@ -34,6 +34,7 @@
                 meal.append('<p> weight: ' + item['weight'] + '</p>');
                 meal.append('<p> calories: ' + item['calories'] + '</p>');
                 meal.append('<p>price: ' + item['price'] + '</p>');
+                meal.append('<a href="/update?oldmeal_id=' + item['id'] + '"><button type="button" class="update">Update</button></a>');
                 meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
                 console.log(meal);
                 $(".meal-container").append(meal);
@@ -65,6 +66,7 @@
               meal.append('<p> weight: ' + item['weight'] + '</p>');
               meal.append('<p> calories: ' + item['calories'] + '</p>');
               meal.append('<p>price: ' + item['price'] + '</p>');
+              meal.append('<a href="/update?oldmeal_id=' + item['id'] + '"><button type="button" class="update">Update</button></a>');
               meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
               console.log(meal);
               $(".meal-container").append(meal);
@@ -114,6 +116,7 @@
                   meal.append('<p> weight: ' + item['weight'] + '</p>');
                   meal.append('<p> calories: ' + item['calories'] + '</p>');
                   meal.append('<p>price: ' + item['price'] + '</p>');
+                  meal.append('<a href="/update?oldmeal_id=' + item['id'] + '"><button type="button" class="update">Update</button></a>');
                   meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
                   console.log(meal);
                   $(".meal-container").append(meal);
@@ -161,6 +164,7 @@
                   meal.append('<p> weight: ' + item['weight'] + '</p>');
                   meal.append('<p> calories: ' + item['calories'] + '</p>');
                   meal.append('<p>price: ' + item['price'] + '</p>');
+                  meal.append('<a href="/update?oldmeal_id=' + item['id'] + '"><button type="button" class="update">Update</button></a>');
                   meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
                   console.log(meal);
                   $(".meal-container").append(meal);
@@ -170,7 +174,7 @@
           }
         });
 
-        $(document).on("click", ".delete", function() {
+        $(document).on("click", ".delete", function(button) {
           var meal_id = $(this).val();
           console.log(meal_id);
 
