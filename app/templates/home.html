@@ -8,9 +8,46 @@
     <script type="text/javascript">
       $(document).ready(function() {
 
+        $("#limit").change(function() {
+          $.ajax({
+            type: "GET",
+            url: "http://localhost:5000/api/meals?limit=" + ~~$("#limit").val(),
+            processData: true,
+            success: function(data, status, xhrStatus) {
+              $(".meal-container").empty();
+
+              $('#prev-page').prop('disabled', true);
+              if (data['_meta']['total_pages'] == 1) {
+                $('#next-page').prop('disabled', true);
+              }
+              else {
+                $('#next-page').prop('disabled', false);
+              }
+
+              $("#txtPage").val(data['_meta']['page']);
+              $("#txtTotal").val(data['_meta']['total_pages']);
+
+              data['items'].forEach((item) => {
+                var meal = $("<div></div>");
+                meal.append('<h1>' + item['name'] + '</h1>');
+                meal.append('<p> description: ' + item['description'] + '</p>');
+                meal.append('<p> weight: ' + item['weight'] + '</p>');
+                meal.append('<p> calories: ' + item['calories'] + '</p>');
+                meal.append('<p>price: ' + item['price'] + '</p>');
+                meal.append('<button type="button" class="delete" value=' + item['id'] + '>Delete</button>');
+                console.log(meal);
+                $(".meal-container").append(meal);
+              });
+            },
+            error: function(xhrStatus, status, error) {
+              alert("An error occured");
+            }
+          });
+        })
+
         $.ajax({
           type: "GET",
-          url: "http://localhost:5000/api/meals",
+          url: "http://localhost:5000/api/meals?limit=" + ~~$("#limit").val(),
           processData: true,
           success: function(data, status, xhrStatus) {
             $('#prev-page').prop('disabled', true);
@@ -42,8 +79,10 @@
           var page = ~~$("#txtPage").val();
           var totalPages = ~~$("#txtTotal").val();
           var nextPage = page + 1;
+          var limit = ~~$("#limit").val();
 
           console.log("nextPage = " + nextPage);
+          console.log("limit = " + limit);
 
           if (nextPage == totalPages) {
             $('#next-page').prop('disabled', true);
@@ -53,9 +92,14 @@
 
             $.ajax({
               type: "GET",
-              url: "http://localhost:5000/api/meals?page=" + nextPage,
+              url: "http://localhost:5000/api/meals?page=" + nextPage + "&limit=" + limit,
               processData: true,
               success: function(data, status, xhrStatus) {
+                totalPages = Math.ceil(data['_meta']['total_items'] / limit);
+
+                console.log(totalPages);
+                $("#txtTotal").val(totalPages);
+
                 $(".meal-container").empty();
                 $("#txtPage").val(nextPage);
 
@@ -83,6 +127,7 @@
           var page = ~~$("#txtPage").val();
           var totalPages = ~~$("#txtTotal").val();
           var prevPage = page - 1;
+          var limit = ~~$("#limit").val();
 
           console.log("prevPage = " + prevPage);
 
@@ -94,9 +139,14 @@
 
             $.ajax({
               type: "GET",
-              url: "http://localhost:5000/api/meals?page=" + prevPage,
+              url: "http://localhost:5000/api/meals?page=" + prevPage + "&limit=" + limit,
               processData: true,
               success: function(data, status, xhrStatus) {
+                totalPages = Math.ceil(data['_meta']['total_items'] / limit);
+
+                console.log(totalPages);
+                $("#txtTotal").val(totalPages);
+
                 $(".meal-container").empty();
                 $("#txtPage").val(prevPage);
 
@@ -146,12 +196,6 @@
     <h1>Menu</h1>
     <a href="{{ url_for('create') }}"><button type="button" name="button">Create meal</button></a>
 
-    <select name="limit">
-      <option value="1">1</option>
-      <option value="3">3</option>
-      <option value="5">5</option>
-    </select>
-
     <div class="meal-container">
 
     </div>
@@ -164,6 +208,12 @@
     <input type="text" id="txtTotal" disabled="true" style="width: 20px;" />
 
     <button type="button" name="button" id="next-page">Next</button>
+
+    <select name="limit" id="limit">
+      <option value="1">1</option>
+      <option value="3">3</option>
+      <option selected value="5">5</option>
+    </select>
 
     {% endblock %}
   </body>
