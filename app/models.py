@@ -28,7 +28,7 @@ class PaginatedAPIMixin(object):
 
 class Meal(PaginatedAPIMixin, db.Model):
     meal_id = db.Column(db.Integer(), primary_key=True)
-    
+
     name = db.Column(db.String(80), nullable=False)
 
     description = db.Column(db.String(80), nullable=False)
@@ -39,8 +39,10 @@ class Meal(PaginatedAPIMixin, db.Model):
 
     price = db.Column(db.Float(), nullable=False)
 
+    image = db.Column(db.String(80))
+
     def __repr__(self):
-        return "Name: {}, Description: {}, Weight: {:.2f}, Calories: {:d}, Price: {:.2f}".format(self.name, self.description, self.weight, self.calories, self.price)
+        return "Name: {}, Description: {}, Weight: {:.2f}, Calories: {:d}, Price: {:.2f}, Image: {}".format(self.name, self.description, self.weight, self.calories, self.price, self.image)
 
     def to_dict(self):
         data = {
@@ -50,6 +52,7 @@ class Meal(PaginatedAPIMixin, db.Model):
             'weight': self.weight,
             'calories': self.calories,
             'price': self.price,
+            'image': self.image,
             '_links': {
                 'self': url_for('api.get_meal', id=self.meal_id)
             }
@@ -58,7 +61,7 @@ class Meal(PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data):
-        for field in ['name', 'description', 'weight', 'calories', 'price']:
+        for field in ['name', 'description', 'weight', 'calories', 'price', 'image']:
             if field not in data:
                 print(field)
                 return -1

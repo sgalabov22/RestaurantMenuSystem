@@ -1,9 +1,28 @@
+import os
+
 from flask import jsonify, request, url_for
+from os.path import join, dirname, realpath
+from app import app
 from app import db
 from app.models import Meal
 from app.api import bp
 from app.api.errors import bad_request
 from app.api.auth import auth
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), "static/images/")
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@bp.route('/meals/image', methods=['POST'])
+def get_image():
+  f = request.files['file']
+  filename = secure_filename(f.filename)
+  f.save(join(app.config['UPLOAD_FOLDER'], filename))
+  f.save(join("/home/stefan/Desktop/flask_apps/RestaurantMenuSystem/app/static/images", filename))
+
+  return 'file uploaded successfully'
 
 @bp.route('/meals/<int:id>', methods=['GET'])
 def get_meal(id):
@@ -28,6 +47,7 @@ def create_meal():
     data = request.get_json() or {}
 
     meal = Meal()
+
     if (meal.from_dict(data) == -1):
         return bad_request('must include all fields')
     else:
