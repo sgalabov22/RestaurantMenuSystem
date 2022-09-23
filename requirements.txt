@@ -43,7 +43,7 @@ Pillow==5.1.0
 pipenv==2018.10.13
 powerline-status==2.6
 progressbar==2.3
-protobuf==3.0.0
+protobuf==3.18.3
 psutil==5.4.2
 pycairo==1.16.2
 pycodestyle==2.3.1
