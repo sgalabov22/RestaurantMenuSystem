@@ -3,7 +3,7 @@ argcomplete==1.8.1
 asn1crypto==0.24.0
 beautifulsoup4==4.6.0
 Brlapi==0.6.6
-certifi==2018.10.15
+certifi==2022.12.7
 chardet==3.0.4
 chrome-gnome-shell==0.0.0
 Click==7.0
